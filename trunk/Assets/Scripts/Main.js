@@ -12,6 +12,7 @@ function Start () {
 			for(var j:int = 0; j < sizeY; j++){
 				var cube:GameObject = 
 					Instantiate(replicationObject);
+				cube.name = "Cube "+i+" "+j+" "+a;
 				cube.transform.position = new Vector3(positionX, positionY, positionZ);
 				positionY+=5;
 			}
