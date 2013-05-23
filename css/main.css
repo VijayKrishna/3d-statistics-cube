@@ -1,10 +1,11 @@
 /* CSS crunched with Crunch - http://crunchapp.net/ */
 html,body,head{height:100%;}
 body,p{margin:0;padding:0;}
-.right-content{float:right;width:55%;}
-.left-content{height:100%;margin-right:55%;position:fixed;width:45%;}
+.right-content{float:right;width:65%;}
+.left-content{height:100%;margin-right:35%;position:fixed;width:35%;}
 ul{list-style-type:none;padding-left:1em;margin:0;}
 ul.div,.left-content,.right-content{margin:0;}
 #block{display:block;height:35em;}
 .block-one{background:#cccccc;}
-.block-two{background:#eeeeee;}
+.block-two{background:#dddddd;}
+#suggestion-block{background:#bbbbbb;height:20%;margin:40px;width:80%;}#suggestion-block p{padding:6px;}
