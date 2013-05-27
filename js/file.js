@@ -62,10 +62,11 @@ function hasNumbers(t)
 }
 
 function drawGraph(evt,data){
+console.log(evt.target.chart);
     var chart = d3.select(evt.target.chart)
     .attr("class", "chart")
     .attr("width", 420)
-    .attr("height", 20 * data.length);
+    .attr("height", 120);
     
     var w = 20,
     h = 80;
