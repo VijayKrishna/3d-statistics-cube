@@ -45,6 +45,8 @@ function handleCSV(evt, f) {
                if(hasNumbers(row[0])){
                     if(hasNumbers(row[1])){
                         var rowData = new Object();
+                        rowData.startDate = row[0].substring(0, 10);
+                        rowData.endDate = row[0].substring(13, row[0].length);
                         rowData.timeRange=row[0];
                         rowData.value = row[1];
                         jsonString.push(rowData);
@@ -56,8 +58,7 @@ function handleCSV(evt, f) {
     reader.readAsText(f);
 }
 
-function hasNumbers(t)
-{
+function hasNumbers(t){
     return /\d/.test(t);
 }
 
@@ -70,7 +71,7 @@ function drawGraph(evt,data){
     .attr("width", width)
     .attr("height", height);
     
-    var w = 20;
+    var w = width/data.length;
     var h = 80;
 
     var xScale = d3.scale.linear()
@@ -86,7 +87,7 @@ function drawGraph(evt,data){
       .enter().append("rect")
         .attr("x", function(d, i) { return xScale(i) - .5; })
         .attr("y", function(d) { return h - yScale(d.value) - .5; })
-        .attr("width", xScale(w))
+        .attr("width", w)
         .attr("height", function(d) { return yScale(d.value)});
      
 }
