@@ -71,7 +71,7 @@ function drawGraph(evt,data){
     .attr("width", width)
     .attr("height", height);
     
-    var w = width/data.length;
+    var w = Math.floor(width/data.length);
     var h = 80;
 
     var xScale = d3.scale.linear()
