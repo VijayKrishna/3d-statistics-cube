@@ -62,38 +62,33 @@ function hasNumbers(t)
 }
 
 function drawGraph(evt,data){
-console.log(evt.target.chart);
+    var width = 700;
+    var height = 120;
+
     var chart = d3.select(evt.target.chart)
     .attr("class", "chart")
-    .attr("width", 420)
-    .attr("height", 120);
+    .attr("width", width)
+    .attr("height", height);
     
-    var w = 20,
-    h = 80;
+    var w = 20;
+    var h = 80;
 
-    var x = d3.scale.linear()
-        .domain([0, 1])
-        .range([0, w]);
+    var xScale = d3.scale.linear()
+        .domain([0, data.length])
+        .range([0, width]);
 
-    var y = d3.scale.linear()
-        .domain([0, 100])
+    var yScale = d3.scale.linear()
+        .domain([0, d3.max(data, function(d) { return d.value; })])
         .rangeRound([0, h]);
       
     chart.selectAll("rect")
         .data(data)
       .enter().append("rect")
-        .attr("x", function(d, i) { return x(i) - .5; })
-        .attr("y", function(d) { return h - y(d.value) - .5; })
-        .attr("width", w)
-        .attr("height", function(d) { return y(d.value); });
+        .attr("x", function(d, i) { return xScale(i) - .5; })
+        .attr("y", function(d) { return h - yScale(d.value) - .5; })
+        .attr("width", xScale(w))
+        .attr("height", function(d) { return yScale(d.value)});
      
-     chart.append("line")
-        .attr("x1", 0)
-        .attr("x2", w * data.length)
-        .attr("y1", h - .5)
-        .attr("y2", h - .5)
-        .style("stroke", "#000");
-
 }
 
 // Setup the dnd listeners.
