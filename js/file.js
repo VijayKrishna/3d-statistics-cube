@@ -4,6 +4,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
   alert('The File APIs are not fully supported in this browser.');
 }
 var jsonString=[];
+var numberOfBars = 40; // Rough value can be n-1 or n
 
 function handleFileSelect(evt) {
     evt.stopPropagation();
@@ -32,8 +33,8 @@ function handleCSV(evt, f) {
     reader.onload = function(f) {
         var content = f.target.result;
         var rows = f.target.result.split(/[\r\n|\n]+/);
-        
-        for(var i = 2; i < rows.length-208; i++){
+        jsonString = [];
+        for(var i = 2; i < rows.length; i++){
                var row = rows[i].split(',');
                if(i===3){
                     if(evt.target.output_zone.indexOf("one") !== -1){
@@ -47,15 +48,41 @@ function handleCSV(evt, f) {
                         var rowData = new Object();
                         rowData.startDate = row[0].substring(0, 10);
                         rowData.endDate = row[0].substring(13, row[0].length);
-                        rowData.timeRange=row[0];
                         rowData.value = row[1];
+                        rowData.size = 1;
                         jsonString.push(rowData);
                     }
                }
-        }        
+        }
+        jsonString = refineData(jsonString);
         drawGraph(evt, jsonString);
     }
     reader.readAsText(f);
+}
+
+function refineData(jsonString){
+    var refine = [];
+    var counter = 0;
+    var mergeSize = Math.floor(jsonString.length/numberOfBars);
+    var rowData = new Object();
+    rowData.startDate = jsonString[0].startDate;
+    rowData.value = 0;
+    for(var i = 0; i < jsonString.length; i++){
+        rowData.value = rowData.value + parseInt(jsonString[i].value);
+        rowData.size = rowData.size+1;
+        if(counter==mergeSize){
+            rowData.endDate = jsonString[i].endDate;
+            refine.push(rowData);
+            rowData = new Object()
+            rowData.startDate = jsonString[i+1].startDate;
+            rowData.value = 0;
+            rowData.size = 1;
+            counter = 0;
+        }
+        counter++;
+    }
+    console.log(refine);
+    return refine;
 }
 
 function hasNumbers(t){
@@ -63,7 +90,7 @@ function hasNumbers(t){
 }
 
 function drawGraph(evt,data){
-    var width = 700;
+    var width = 640;
     var height = 120;
 
     var chart = d3.select(evt.target.chart)
@@ -82,11 +109,11 @@ function drawGraph(evt,data){
         .domain([0, d3.max(data, function(d) { return d.value; })])
         .rangeRound([0, h]);
       
-    chart.selectAll("rect")
-        .data(data)
-      .enter().append("rect")
-        .attr("x", function(d, i) { return xScale(i) - .5; })
-        .attr("y", function(d) { return h - yScale(d.value) - .5; })
+    var bars = chart.selectAll("rect")
+        .data(data);
+      bars.enter().append("rect")
+        .attr("x", function(d, i) { return xScale(i) + .5; })
+        .attr("y", function(d) { return h - yScale(d.value); })
         .attr("width", w)
         .attr("height", function(d) { return yScale(d.value)});
      

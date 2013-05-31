@@ -16,11 +16,21 @@
 <svg id=chart_one>
 </svg>
 <script>
-var data = [{"time": 1297110663, "value": 56},
-{"time": 1297110664, "value": 53},
-{"time": 1297110665, "value": 58},
-{"time": 1297110666, "value": 58}];
-console.log(data);
+var data = [{"time": 2004-01-04, "value": 64},
+{"time": 2004-01-11, "value": 65},
+{"time": 2004-01-18, "value": 69},
+{"time": 2004-01-25, "value": 70},
+{"time": 2004-02-01, "value": 70},
+{"time": 2004-02-08, "value": 71},
+{"time": 2004-02-15, "value": 76},
+{"time": 2004-02-22, "value": 73},
+{"time": 2004-02-29, "value": 72},
+{"time": 2004-03-07, "value": 62},
+{"time": 2004-03-14, "value": 67},
+{"time": 2004-03-21, "value": 67}];
+var cf = crossfilter(data);
+var ymdFormat = d3.time.format("%Y-%m-%d");
+
 var chart = d3.select("#chart_one")
     .attr("class", "chart")
     .attr("width", 420)
@@ -44,13 +54,19 @@ chart.selectAll("rect")
     .attr("y", function(d) { return h - y(d.value) - .5; })
     .attr("width", w)
     .attr("height", function(d) { return y(d.value); });
- 
- chart.append("line")
-    .attr("x1", 0)
-    .attr("x2", w * data.length)
-    .attr("y1", h - .5)
-    .attr("y2", h - .5)
-    .style("stroke", "#000");
+
+ window.filter = function(tagname) {
+ byTags.filterFunction(function (tag) {
+  if (tag!==null && typeof(tag)!='undefined'){
+   for(i=0; i<tag.length; i++) {
+    if (tag[i].title==tagname){
+     return true;
+    }
+   }
+  }
+  return false;
+ });
+}
 </script>
  </body>
 </html>
