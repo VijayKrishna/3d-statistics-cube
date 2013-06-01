@@ -14,6 +14,8 @@
 </head>
 <body>
 <svg id=chart_one>
+    <g>
+    </g>
 </svg>
 <script>
 var data = [{"time": 2004-01-04, "value": 64},
@@ -28,6 +30,7 @@ var data = [{"time": 2004-01-04, "value": 64},
 {"time": 2004-03-07, "value": 62},
 {"time": 2004-03-14, "value": 67},
 {"time": 2004-03-21, "value": 67}];
+
 var cf = crossfilter(data);
 var ymdFormat = d3.time.format("%Y-%m-%d");
 
@@ -46,27 +49,39 @@ var x = d3.scale.linear()
 var y = d3.scale.linear()
     .domain([0, 100])
     .rangeRound([0, h]);
-  
-chart.selectAll("rect")
-    .data(data)
-  .enter().append("rect")
-    .attr("x", function(d, i) { return x(i) - .5; })
-    .attr("y", function(d) { return h - y(d.value) - .5; })
-    .attr("width", w)
-    .attr("height", function(d) { return y(d.value); });
-
- window.filter = function(tagname) {
- byTags.filterFunction(function (tag) {
-  if (tag!==null && typeof(tag)!='undefined'){
-   for(i=0; i<tag.length; i++) {
-    if (tag[i].title==tagname){
-     return true;
-    }
-   }
-  }
-  return false;
- });
+ 
+function render(){
+    var bars = chart.select("g").selectAll("rect")
+        .data(data);
+     bars.enter().append("rect");
+     bars.on("click", clickEvent)
+        .attr("x", function(d, i) { return x(i) - .5; })
+        .attr("y", function(d) { return h - y(d.value) - .5; })
+        .attr("width", w)
+        .attr("height", function(d) { return y(d.value); });
 }
+render();
+
+function clickEvent(d, i) {
+console.log(d);
+    var op = prompt("Please enter the value", data[i].value);
+    if(!isNaN(parseInt(op,10))){
+    data = [{"time": 2004-01-04, "value": 2},
+{"time": 2004-01-11, "value": 3},
+{"time": 2004-01-18, "value": 4},
+{"time": 2004-01-25, "value": 5},
+{"time": 2004-02-01, "value": 70},
+{"time": 2004-02-08, "value": 5},
+{"time": 2004-02-15, "value": 76},
+{"time": 2004-02-22, "value": 73},
+{"time": 2004-02-29, "value": 72},
+{"time": 2004-03-07, "value": 62},
+{"time": 2004-03-14, "value": 67},
+{"time": 2004-03-21, "value": 67}];
+        data[i].value = parseInt(op, 10);
+        render();
+    }
+};
 </script>
  </body>
 </html>
