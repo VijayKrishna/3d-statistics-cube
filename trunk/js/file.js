@@ -3,7 +3,6 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 } else {
   alert('The File APIs are not fully supported in this browser.');
 }
-var dataSet=[];
 var numberOfBars = 40; // Rough value can be n-1 or n
 
 function handleFileSelect(evt) {
@@ -33,7 +32,7 @@ function handleCSV(evt, f) {
     reader.onload = function(f) {
         var content = f.target.result;
         var rows = f.target.result.split(/[\r\n|\n]+/);
-        dataSet = [];
+        var dataSet = [];
         for(var i = 2; i < rows.length; i++){
                var row = rows[i].split(',');
                if(i===3){
@@ -55,12 +54,11 @@ function handleCSV(evt, f) {
                }
         }
         dataSet = refineData(dataSet);
-        drawGraph(evt);
-        console.log(dataSet);
+        render(evt, dataSet);
     }
     reader.readAsText(f);
 }
-
+    
 function refineData(dataSet){
     var refine = [];
     var counter = 0;
@@ -68,6 +66,7 @@ function refineData(dataSet){
     var rowData = new Object();
     rowData.startDate = dataSet[0].startDate;
     rowData.value = 0;
+    rowData.size = 1;
     for(var i = 0; i < dataSet.length; i++){
         rowData.value = rowData.value + parseInt(dataSet[i].value);
         rowData.size = rowData.size+1;
@@ -89,19 +88,15 @@ function hasNumbers(t){
     return /\d/.test(t);
 }
 
-function drawGraph(evt){
-    var width = 640;
-    var height = 120;
-    var data = dataSet;
-    var chart = d3.select(evt.target.chart)
-        .attr("class", "chart")
-        .attr("width", width)
-        .attr("height", height);
-    var chartG = chart.select("g")
-        .attr("transform","translate("+0+","+25+")");
+// width of g, which svg will have to have offset from translation
+var width = 640;
+var height = 120;
+
+function render(evt, dataSet){
+    var data = dataSet;        
     var w = Math.ceil(width/data.length);
     var h = 80;
-
+        
     var xScale = d3.scale.linear()
         .domain([0, data.length])
         .range([0, width]);
@@ -109,35 +104,35 @@ function drawGraph(evt){
     var yScale = d3.scale.linear()
         .domain([0, d3.max(data, function(d) { return d.value; })])
         .rangeRound([0, h]);
-      
-    var bars = chartG.selectAll("rect")
+        
+    var bars = d3.select(evt.target.chart)
+        .select("g").selectAll("rect")
         .data(data);
-      bars.enter().append("rect")
+        
+    bars.enter().append("rect");
+        
+    bars.on("click", function(d, i) {
+        var op = prompt("Please enter the value", data[i].value);    
+        if(!isNaN(parseInt(op,10))){
+            data[i].value = parseInt(op, 10);
+            render(evt, data);
+        }
+        })
         .attr("x", function(d, i) { return xScale(i) + .5; })
         .attr("y", function(d) { return h - yScale(d.value); })
         .attr("width", w)
         .attr("height", function(d) { return yScale(d.value)});
-       bars.on("click",  function(){clickEvent(evt);});
-     
+;
 }
-
-
-function clickEvent( evt, d) {
-    var op = prompt("Please enter the value", d);
-    drawGraph(evt);
-};
-
 // Setup the dnd listeners.
 var dropZone1 = document.getElementById('drop_zone_one');
 dropZone1.addEventListener('dragover', handleDragOver, false);
 dropZone1.addEventListener('drop', handleFileSelect, false);
 dropZone1.output_zone = 'list_one';
 dropZone1.chart = '#chart_one';
-dropZone1.g = 'group_chart_one'; 
 
 var dropZone2 = document.getElementById('drop_zone_two');
 dropZone2.addEventListener('dragover', handleDragOver, false);
 dropZone2.addEventListener('drop', handleFileSelect, false);
 dropZone2.output_zone = 'list_two';
 dropZone2.chart = '#chart_two';
-dropZone2.g = 'group_chart_two';
