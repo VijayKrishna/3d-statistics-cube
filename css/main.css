@@ -3,14 +3,14 @@ html,body{height:100%;min-width:950px;}
 body,p{font-family:'Noto Sans',sans-serif;margin:0;padding:0;}
 #content{clear:both;margin:0 auto;max-width:1400px;min-width:1000px;width:auto;}
 #header{padding:5px;position:fixed;width:100%;z-index:101;}
-#right-content{float:right;padding-top:5px;width:720px;}
+#right-content{float:right;width:720px;}
 #left-content{height:100%;margin-right:35%;padding:5px;position:fixed;width:35%;min-width:320px;}
 ul{list-style-type:none;padding-left:1em;margin:0;}
 ul.div,.left-content,.right-content{margin:0;}
-#block{display:block;height:35em;}
-.block-one{background:#cccccc;}
-.block-two{background:#dddddd;}
-form{margin:5px;}form input{margin:5px;}
+.block{display:block;height:25em;padding-left:5px;}
+#block-one{background:#cccccc;}
+#block-two{background:#dddddd;}
+form{margin:5px;}form select,form input{margin:5px;}
 .sample{padding:20px;}.sample h4{margin-bottom:5px;}
 .sample .drop_zone{border:2px dashed #BBBBBB;border-radius:5px 5px 5px 5px;color:#BBBBBB;padding:25px;text-align:center;}
 #suggestion-block{background:#bbbbbb;height:20%;margin:40px;width:80%;}#suggestion-block p{padding:6px;}

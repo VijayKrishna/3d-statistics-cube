@@ -13,9 +13,8 @@
       <div id="right-content">
         <ul>
           <li>
-            <div class="block-one" id="block">
+            <div class="block" id="block-one">
               <h2>2. Define Population</h2>
-              <p>https://github.com/square/crossfilter/wiki/API-Reference</p>
               <div class="chart" >
               <svg id="chart_one" width = "650" height = "120">
                   <g  transform="translate(10,25)">
@@ -31,23 +30,37 @@
             </div>
           </li>
           <li>
-            <div class="block-two" id="block">
+            <div class="block" id="block-two">
               <h2>3. Select the Test Input</h2>
-              <select>
-                  <option value="Serial" selected>Serial</option>
-                  <option value="Random">Random</option>
-                  <option value="Partition">Partition</option>
-                  <option value="notequals">Cluster</option>
-                </select>
                 <div>
-                <p> Confidence Interval</p>
-                <p> &alpha; - Alpha (The Level of Significance)</p>
+                <form name="input-set">
+                    <select id="sample-type">
+                      <option value="Serial" selected>Serial</option>
+                      <option value="Random">Random</option>
+                      <option value="Partition">Partition</option>
+                      <option value="notequals">Cluster</option>
+                    </select>
+                    <div>
+                    <input id="ci" type="text">Confidence Interval</input>
+                    </div>
+                    <div>
+                    <input>&alpha; - Alpha (The Level of Significance)</input>
+                    </div>
+                    <div>
+                        <input id="compute" type="button" value="Compute" onClick="run_test()"></input>
+                    </div>
+                </form>
                 </div>
             </div>
           </li>
           <li>
-            <div class="block-one" id="block">
+            <div class="block" id="block-one">
               <h2>4. Results</h2>
+              <div id="result-set">
+                  <p>p-value</p>
+                  <p>effective size</p>
+                  <p>Confidence Interval</p>
+              </div>
             </div>
           </li>
         </ul>
@@ -65,21 +78,19 @@
         <input type="text" placeholder="&mu; 2" />
         <br />Ha:  
         <input type="text" placeholder="&mu; 1" /> 
-        <select>
-          <option value="greater"> > </option>
-          <option value="lesser"> < </option>
-          <option value="notequals"> != </option>
+        <select id="alternative-options">
+          <option value="greater"> &gt; </option>
+          <option value="lesser"> &lt; </option>
+          <option value="notequals"> &#33;&#61; </option>
         </select>
         <input type="text" placeholder="&mu; 2" /></form>
         <div class="sample">
           <h4>Sample File 1 (Google Trend CSV File)</h4>
           <div class="drop_zone" id="drop_zone_one">Drop files here</div>
-          <output id="list_one"></output>
         </div>
         <div class="sample">
           <h4>Sample File 2 (Google Trend CSV File)</h4>
           <div class="drop_zone" id="drop_zone_two">Drop files here</div>
-          <output id="list_two"></output>
         </div>
         <div id="suggestion-block">
           <p>Suggestions</p>

@@ -104,8 +104,9 @@ function render(evt, dataSet){
     var yScale = d3.scale.linear()
         .domain([0, d3.max(data, function(d) { return d.value; })])
         .rangeRound([0, h]);
-        
-    var bars = d3.select(evt.target.chart)
+    
+    var chart = evt.target.chart;
+    var bars = d3.select(chart)
         .select("g").selectAll("rect")
         .data(data);
         
@@ -122,7 +123,11 @@ function render(evt, dataSet){
         .attr("y", function(d) { return h - yScale(d.value); })
         .attr("width", w)
         .attr("height", function(d) { return yScale(d.value)});
-;
+    
+    // Remove the hash tag and insert the data into svg
+    chart = chart.substring(1, chart.length);
+    document.getElementById(chart).content = data;
+
 }
 // Setup the dnd listeners.
 var dropZone1 = document.getElementById('drop_zone_one');
@@ -136,3 +141,19 @@ dropZone2.addEventListener('dragover', handleDragOver, false);
 dropZone2.addEventListener('drop', handleFileSelect, false);
 dropZone2.output_zone = 'list_two';
 dropZone2.chart = '#chart_two';
+
+function run_test(){
+    var sampleType = getSelected(document.getElementById('sample-type'));
+    var alternativeOption = getSelected(document.getElementById('alternative-options'));
+    
+    console.log(document.getElementById('chart_one').content);
+        console.log(document.getElementById('chart_two').content);
+}
+
+function getSelected(selectOptions){
+for(var i = 0; i < selectOptions.length;i++){
+        if(selectOptions.options[i].selected){
+            return selectOptions.options[i].value;
+        }
+    }
+}

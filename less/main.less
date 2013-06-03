@@ -24,7 +24,6 @@ body,p {
 }
 #right-content{
     float:right;
-    padding-top:@padding;
     width:720px;
 }
 #left-content{
@@ -43,19 +42,20 @@ ul{
 ul.div, .left-content, .right-content{
     margin:0;
 }
-#block{
+.block{
     display:block;
-    height:35em;
+    height:25em;
+    padding-left:@padding;
 }
-.block-one{
+#block-one{
     background:@color;
 }
-.block-two{
+#block-two{
     background:@color + #111;    
 }
 form{
     margin:5px;
-    input{
+    select, input{
         margin:5px;   
     }
 }
