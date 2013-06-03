@@ -66,18 +66,6 @@ function clickEvent(d, i) {
 console.log(d);
     var op = prompt("Please enter the value", data[i].value);
     if(!isNaN(parseInt(op,10))){
-    data = [{"time": 2004-01-04, "value": 2},
-{"time": 2004-01-11, "value": 3},
-{"time": 2004-01-18, "value": 4},
-{"time": 2004-01-25, "value": 5},
-{"time": 2004-02-01, "value": 70},
-{"time": 2004-02-08, "value": 5},
-{"time": 2004-02-15, "value": 76},
-{"time": 2004-02-22, "value": 73},
-{"time": 2004-02-29, "value": 72},
-{"time": 2004-03-07, "value": 62},
-{"time": 2004-03-14, "value": 67},
-{"time": 2004-03-21, "value": 67}];
         data[i].value = parseInt(op, 10);
         render();
     }
