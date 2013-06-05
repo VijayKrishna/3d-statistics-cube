@@ -93,19 +93,39 @@ var width = 640;
 var height = 120;
 
 function render(evt, dataSet){
-    var data = dataSet;        
+    var data = dataSet;  
+    var timeFormat = d3.time.format("%Y-%d-%d").parse;
+
     var w = Math.ceil(width/data.length);
     var h = 80;
-        
-    var xScale = d3.scale.linear()
-        .domain([0, data.length])
+    var xScale = d3.time.scale()
+        .domain([new Date(data[0].startDate), d3.time.day.offset(new Date(data[data.length - 1].startDate), 1)])
         .range([0, width]);
 
     var yScale = d3.scale.linear()
-        .domain([0, d3.max(data, function(d) { return d.value; })])
-        .rangeRound([0, h]);
+        .domain([d3.min(data, function(d) { return d.value - 50; }),
+                        d3.max(data, function(d) { return d.value; })])
+        .rangeRound([h, 0]);
     
+    var xAxis = d3.svg.axis()
+                        .scale(xScale)
+                        .ticks(6)
+                        .tickPadding(6)
+                        .tickSize(0)
+                        .orient('bottom');  
+    var yAxis = d3.svg.axis()
+                        .scale(yScale)
+                        .ticks(3)
+                        .orient('left');
+                        
     var chart = evt.target.chart;
+    if(evt.target.output_zone.indexOf("one") !== -1){
+        d3.select("#x-axis-one").call(xAxis);
+        d3.select("#y-axis-one").call(yAxis);
+    } else {
+        d3.select("#x-axis-two").call(xAxis);
+        d3.select("#y-axis-two").call(yAxis);    
+    }
     var bars = d3.select(chart)
         .select("g").selectAll("rect")
         .data(data);
@@ -119,10 +139,11 @@ function render(evt, dataSet){
             render(evt, data);
         }
         })
-        .attr("x", function(d, i) { return xScale(i) + .5; })
-        .attr("y", function(d) { return h - yScale(d.value); })
+        .attr("x", function(d, i) { console.log(data[i].startDate);return xScale(new Date(data[i].startDate)); })
+        .attr('y', function(d) { return h  - (h - yScale(d.value)) })
         .attr("width", w)
-        .attr("height", function(d) { return yScale(d.value)});
+        .attr("height", function(d) { return h - yScale(d.value); })
+        ;
     
     // Remove the hash tag and insert the data into svg
     chart = chart.substring(1, chart.length);
@@ -133,21 +154,21 @@ function render(evt, dataSet){
 var dropZone1 = document.getElementById('drop_zone_one');
 dropZone1.addEventListener('dragover', handleDragOver, false);
 dropZone1.addEventListener('drop', handleFileSelect, false);
-dropZone1.output_zone = 'list_one';
-dropZone1.chart = '#chart_one';
+dropZone1.output_zone = 'list_one'; // Sample Input One
+dropZone1.chart = '#chart_one'; // svg tag chart one
 
 var dropZone2 = document.getElementById('drop_zone_two');
 dropZone2.addEventListener('dragover', handleDragOver, false);
 dropZone2.addEventListener('drop', handleFileSelect, false);
-dropZone2.output_zone = 'list_two';
-dropZone2.chart = '#chart_two';
+dropZone2.output_zone = 'list_two'; // Sample Input Two
+dropZone2.chart = '#chart_two'; // svg tag chart two
 
 function run_test(){
     var sampleType = getSelected(document.getElementById('sample-type'));
     var alternativeOption = getSelected(document.getElementById('alternative-options'));
     
     console.log(document.getElementById('chart_one').content);
-        console.log(document.getElementById('chart_two').content);
+    console.log(document.getElementById('chart_two').content);
 }
 
 function getSelected(selectOptions){
