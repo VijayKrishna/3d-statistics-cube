@@ -4,10 +4,23 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" charset="utf-8" >
 <style>
-.chart rect {
-  stroke: white;
-  fill: steelblue;
+.chart{
+    font-size: 10px;
 }
+.chart rect {
+	stroke: white;
+	fill: steelblue;
+}
+.chart rect:hover{
+	opacity:0.5;
+}
+.axis path,
+.axis line {
+	fill: none;
+	stroke: black;
+	stroke-width: 1;
+	shape-rendering: crispEdges;
+} 
 </style>
 <script src="js/d3.v3.js" charset="utf-8" type="text/javascript"></script>
 <script src="js/crossfilter.js" type="text/javascript"></script>
@@ -15,63 +28,80 @@
 <body>
 <p></p>
 <p></p>
-<svg id=chart_one>
-    <g>
-    </g>
+<svg id="chart_one" class="chart" height="120" width="900">
+	<g transform="translate(40,20)"> </g>
 </svg>
 <script>
-var data = [{"time": 2004-01-04, "value": 64},
-{"time": 2004-01-11, "value": 65},
-{"time": 2004-01-18, "value": 69},
-{"time": 2004-01-25, "value": 70},
-{"time": 2004-02-01, "value": 70},
-{"time": 2004-02-08, "value": 71},
-{"time": 2004-02-15, "value": 76},
-{"time": 2004-02-22, "value": 73},
-{"time": 2004-02-29, "value": 72},
-{"time": 2004-03-07, "value": 62},
-{"time": 2004-03-14, "value": 67},
-{"time": 2004-03-21, "value": 67}];
+
+var data = [{"time": "2004-01-04", "value": 1},
+{"time": "2004-01-11", "value": 2},
+{"time": "2004-01-18", "value": 3},
+{"time": "2004-01-25", "value": 4},
+{"time": "2004-02-01", "value": 5},
+{"time": "2004-02-08", "value": 6},
+{"time": "2004-02-15", "value": 7},
+{"time": "2004-02-22", "value": 8},
+{"time": "2004-02-29", "value": 9},
+{"time": "2004-03-07", "value": 10},
+{"time": "2004-03-14", "value": 11},
+{"time": "2004-03-21", "value": 12}];
 
 var cf = crossfilter(data);
-var ymdFormat = d3.time.format("%Y-%m-%d");
+var timeFormat = d3.time.format("%Y-%d-%d").parse;
 
+var width = 420;
+var height = 120;
 var chart = d3.select("#chart_one")
-    .attr("class", "chart")
-    .attr("width", 420)
-    .attr("height", 20 * data.length);
+var w = 20;
+var h = 80;
+
+console.log(data);
+var xScale = d3.time.scale()
+    .domain([new Date(data[0].time), d3.time.day.offset(new Date(data[data.length - 1].time), 1)])
+    .range([0, width]);
     
- var w = 20,
-    h = 80;
-
-var x = d3.scale.linear()
-    .domain([0, 1])
-    .range([0, w]);
-
-var y = d3.scale.linear()
-    .domain([0, 100])
-    .rangeRound([0, h]);
+var yScale = d3.scale.linear()
+    .domain([0, d3.max(data, function(d) { return d.value; })])
+    .rangeRound([h,0]);
  
+var xAxis = d3.svg.axis().scale(xScale)
+            .ticks(6)
+			.tickPadding(8)
+			.tickSize(0)
+            .orient("bottom");
+ 
+var yAxis = d3.svg.axis().scale(yScale)
+            .ticks(3)
+            .orient("left");
+
+chart.select("g").append("g")
+    .attr("class","axis")
+    .attr("transform", "translate(0,"+(height-39)+")")
+    .call(xAxis);
+chart.select("g").append("g")
+    .attr("class","axis")
+    .call(yAxis);
+    
 function render(){
     var bars = chart.select("g").selectAll("rect")
         .data(data);
      bars.enter().append("rect");
      bars.on("click", clickEvent)
-        .attr("x", function(d, i) { return x(i) - .5; })
-        .attr("y", function(d) { return h - y(d.value) - .5; })
+        .attr("x", function(d, i) { return xScale(new Date(d.time)); })
+        .attr('y', function(d) { return h  - (h - yScale(d.value)) })
         .attr("width", w)
-        .attr("height", function(d) { return y(d.value); });
+        .attr("height", function(d) { return h - yScale(d.value); });
 }
 render();
 
 function clickEvent(d, i) {
-console.log(d);
     var op = prompt("Please enter the value", data[i].value);
     if(!isNaN(parseInt(op,10))){
         data[i].value = parseInt(op, 10);
         render();
     }
 };
+
 </script>
  </body>
 </html>
