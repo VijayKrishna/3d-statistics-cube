@@ -4,52 +4,122 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" charset="utf-8"/>
     <title>Statistics t-test Animation</title>
     <link href="css/main.css" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
     <script src="js/d3.v3.js" charset="utf-8" type="text/javascript"></script>
     <script src="js/crossfilter.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js"></script>
   </head>
   <body>
     <div id="content">
-      <div id="right-content">
+    <div class="span5" style="position:fixed"> <!-- id="left-content" -->
+        <h1>Statistics t-test</h1>
+        <ul class="nav nav-tabs nav-stacked">
+          <li><a tabindex="-1" href="#step1">Step 1: Research Questions & Hypotheses</a></li>
+          <li><a tabindex="-1" href="#step2">Step 2: Edit Population</a></li>
+          <li><a tabindex="-1" href="#step3">Step 3: Define Test</a></li>
+          <li><a tabindex="-1" href="#step4">Step 4: View Results</a></li>
+          <li class="divider"></li>
+          <li><a tabindex="-1" href="#">Setup Data</a></li>
+        </ul>
+        
+        <div id="suggestion-block">
+          <p>Disucssion and Feedback</p>
+          <div class="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Warning!</strong> Best check your self, you're not looking too good.
+          </div>
+          <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Confidence Intervals</strong> are ... .
+          </div>
+          <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Well Done!</strong> you have succssfully loaded your data.
+          </div>
+          <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Well, this is embarassing!</strong> Something seems to have gone terribly wrong. Report this issue to xyz @ i . com
+          </div>
+        </div>
+      </div>
+      <div id="right-content" class="span7">
         <ul>
           <li>
-            <div class="block" id="block-one">
+            <div class="hero-unit" id="step1">
+              <h2>step 1. Research Question and Null-Hypothesis</h2>
+              <form>
+              <span class="label label-important">Research Question (RQ1): </span>
+              <input id="sample_one" class="span2" type="text" placeholder="Sample 1" /> 
+              <span class="label label-info">versus</span>
+              <input id="sample_two" class="span2" type="text" placeholder="Sample 2" />
+              <br />
+              <span class="label label-important">Null Hypothesis (H0):</span>
+              <input class="span2" type="text" placeholder="&mu; 1" /> 
+              <span class="label label-info">equals</span>
+              <input class="span2" type="text" placeholder="&mu; 2" />
+              <br />
+              <span class="label label-important">Alternate Hypothesis (Ha):  </span>
+              <input class="span2" type="text" placeholder="&mu; 1" /> 
+              <select id="alternative-options" class="span1">
+                <option value="greater"> &gt; </option>
+                <option value="lesser"> &lt; </option>
+                <option value="notequals"> &#33;&#61; </option>
+              </select>
+              <input class="span2" type="text" placeholder="&mu; 2" /></form>
+            </div>
+          </li>
+          <li>
+            <div class="hero-unit" id="step2">
               <h2>step 2. Define Population</h2>
-              <div class="chart" >
-              <svg id="chart_one" width = "700" height = "150">
-                <g id="chart_one_barsholder"  transform="translate(40,25)">
-                </g>
-                <g class = "axis" id="x-axis-one" transform="translate(40, 105)">
-                </g>
-                <g class = "axis" id=y-axis-one transform="translate(40, 25)">
-                </g>
-              </svg>
-              <span>Current Selection:</span>
-              <span id="chart_one_selection_start">waiting for you</span>
-              <span>to</span>
-              <span id="chart_one_selection_end">drop some CSV files.</span>
-              <span>(we assume that selecting nothing is selecting everything)</span>
+              <div class="sample">
+                  <h4>Sample File 1 (Google Trend CSV File <a href="report(1).csv">example</a>)</h4>
+                  <div class="drop_zone" id="drop_zone_one">Drop files here</div>
               </div>
-              <br/>
+                <small>Current Selection:</small>
+                <small id="chart_one_selection_start">waiting for you</small>
+                <small>to</small>
+                <small id="chart_one_selection_end">drop some CSV files.</small>
+                <br/>
+                <small class="muted">(we assume that selecting nothing is selecting everything)</small>
               <div class="chart">
-              <svg id="chart_two" width = "700" height = "120">
-                <g id="chart_two_barsholder" transform="translate(40,25)">
-                </g>
-                <g class = "axis" id=x-axis-two transform="translate(40, 105)">
-                </g>
-                <g class = "axis" id=y-axis-two transform="translate(40, 25)">
-                </g>
-              </svg>
-              <span>Current Selection:</span>
-              <span id="chart_two_selection_start">waiting for you</span>
-              <span>to</span>
-              <span id="chart_two_selection_end">drop some CSV files.</span>
-              <span>(we assume that selecting nothing is selecting everything)</span>
+                <svg id="chart_one" width = "700" height = "150">
+                  <g id="chart_one_barsholder"  transform="translate(40,25)">
+                  </g>
+                  <g class = "axis" id="x-axis-one" transform="translate(40, 105)">
+                  </g>
+                  <g class = "axis" id=y-axis-one transform="translate(40, 25)">
+                  </g>
+                </svg>
+                
+              </div>
+              <div class="sample">
+                <h4>Sample File 2 (Google Trend CSV File <a href="report(2).csv">example</a>)</h4>
+                <div class="drop_zone" id="drop_zone_two">Drop files here</div>
+              </div>
+              
+              <small>Current Selection:</small>
+              <small id="chart_two_selection_start">waiting for you</small>
+              <small>to</small>
+              <small id="chart_two_selection_end">drop some CSV files.</small>
+              <br/>
+              <small class="muted">(we assume that selecting nothing is selecting everything)</small>
+              <div class="chart">
+                <svg id="chart_two" width = "700" height = "120">
+                  <g id="chart_two_barsholder" transform="translate(40,25)">
+                  </g>
+                  <g class = "axis" id=x-axis-two transform="translate(40, 105)">
+                  </g>
+                  <g class = "axis" id=y-axis-two transform="translate(40, 25)">
+                  </g>
+                </svg>
+                
               </div>
             </div>
           </li>
           <li>
-            <div class="block" id="block-two">
+            <div class="hero-unit" id="step3">
               <h2>step 3. Select the Test Input</h2>
                 <div>
                 <form name="input-set">
@@ -64,17 +134,17 @@
                     <input id="ci" type="text">Confidence Interval</input>
                     </div>
                     <div>
-                    <input>&alpha; - Alpha (The Level of Significance)</input>
+                    <input type="text">&alpha; - Alpha (The Level of Significance)</input>
                     </div>
                     <div>
-                        <input id="compute" type="button" value="Compute" onClick="run_test()"></input>
+                        <input class="btn btn-primary" id="compute" type="button" value="Compute" onClick="run_test()"></input>
                     </div>
                 </form>
                 </div>
             </div>
           </li>
           <li>
-            <div class="block" id="block-one">
+            <div class="hero-unit" id="step4">
               <h2>step 4. Reap the Results</h2>
               <div id="result-set">
                   <p>p-value</p>
@@ -85,37 +155,7 @@
           </li>
         </ul>
       </div>
-      <div id="left-content">
-        <h1>Statistics t-test</h1>
-        <h2>step 1. Research Question and Null-Hypothesis</h2>
-        <form>RQ: 
-        <input id="sample_one" type="text" placeholder="Sample 1" /> v.s. 
-        <span>
-          <input id="sample_two" type="text" placeholder="Sample 2" />
-        </span>
-        <br />H0:  
-        <input type="text" placeholder="&mu; 1" /> = 
-        <input type="text" placeholder="&mu; 2" />
-        <br />Ha:  
-        <input type="text" placeholder="&mu; 1" /> 
-        <select id="alternative-options">
-          <option value="greater"> &gt; </option>
-          <option value="lesser"> &lt; </option>
-          <option value="notequals"> &#33;&#61; </option>
-        </select>
-        <input type="text" placeholder="&mu; 2" /></form>
-        <div class="sample">
-          <h4>Sample File 1 (Google Trend CSV File <a href="report(1).csv">example</a>)</h4>
-          <div class="drop_zone" id="drop_zone_one">Drop files here</div>
-        </div>
-        <div class="sample">
-          <h4>Sample File 2 (Google Trend CSV File <a href="report(2).csv">example</a>)</h4>
-          <div class="drop_zone" id="drop_zone_two">Drop files here</div>
-        </div>
-        <div id="suggestion-block">
-          <p>Suggestions</p>
-        </div>
-      </div>
+      
       <script src="js/file.js" type="text/javascript"></script>
     </div>
   </body>
