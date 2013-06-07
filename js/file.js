@@ -93,6 +93,9 @@ var width = 640;
 var height = 120;
 
 function render(evt, dataSet){
+
+
+
     var data = dataSet;  
     var timeFormat = d3.time.format("%Y-%d-%d").parse;
 
@@ -119,19 +122,25 @@ function render(evt, dataSet){
                         .orient('left');
                         
     var chart = evt.target.chart;
+    var svg = null
     if(evt.target.output_zone.indexOf("one") !== -1){
         d3.select("#x-axis-one").call(xAxis);
         d3.select("#y-axis-one").call(yAxis);
+        svg = d3.select("#chart_one");
     } else {
         d3.select("#x-axis-two").call(xAxis);
         d3.select("#y-axis-two").call(yAxis);    
+        svg = d3.select("#chart_two");
     }
+
+
+
     var bars = d3.select(chart)
         .select("g").selectAll("rect")
         .data(data);
         
     bars.enter().append("rect");
-        
+
     bars.on("click", function(d, i) {
         var op = prompt("Please enter the value", data[i].value);    
         if(!isNaN(parseInt(op,10))){
@@ -139,16 +148,47 @@ function render(evt, dataSet){
             render(evt, data);
         }
         })
-        .attr("x", function(d, i) { console.log(data[i].startDate);return xScale(new Date(data[i].startDate)); })
+        .attr("x", function(d, i) { return xScale(new Date(data[i].startDate)); })
         .attr('y', function(d) { return h  - (h - yScale(d.value)) })
         .attr("width", w)
         .attr("height", function(d) { return h - yScale(d.value); })
+        .style("fill","steelblue")
+        .style("stroke", "white")
+        ;
+
+    var brush = d3.svg.brush().x(xScale)
+        .on("brushstart", function() {
+            svg.classed("selecting", true);
+        })
+        .on("brush", function() {
+          var s = d3.event.target.extent();
+          // console.log(s[0] + " " + s[1]);
+          s[0] = xScale(s[0]);
+          s[1] = xScale(s[1]);
+          // console.log(s[0] + " " + s[1]);
+          bars.classed("selected", function(d,i) { 
+            var temp_x = xScale(new Date(data[i].startDate));
+            // console.log(temp_x);
+            return (s[0] - .5) <= temp_x && (temp_x + w) <= s[1]; });
+        })
+        .on("brushend", function() {
+            svg.classed("selecting", !d3.event.target.empty());
+        });
+
+    svg.append("g")
+        .attr("class", "brush")
+        .attr("transform", "translate(40,25)")
+        .call(brush)
+        .selectAll("rect")
+        .attr("height", h)
         ;
     
     // Remove the hash tag and insert the data into svg
     chart = chart.substring(1, chart.length);
     document.getElementById(chart).content = data;
+    
 
+    
 }
 // Setup the dnd listeners.
 var dropZone1 = document.getElementById('drop_zone_one');
@@ -178,3 +218,4 @@ for(var i = 0; i < selectOptions.length;i++){
         }
     }
 }
+

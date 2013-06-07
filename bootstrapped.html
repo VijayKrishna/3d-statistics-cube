@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" charset="utf-8"/>
+    <title>Statistics t-test Animation</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <!-- <link href="css/main.css" rel="stylesheet" type="text/css" /> -->
+    <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
+    <script src="js/d3.v3.js" charset="utf-8" type="text/javascript"></script>
+    <script src="js/crossfilter.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </head>
+  <body>
+<div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <h1>Statistics t-test</h1>
+            <h2>1. Research Question and Null-Hypothesis</h2>
+            <form>RQ: 
+            <input id="sample_one" type="text" placeholder="Sample 1" /> v.s. 
+            <span>
+              <input id="sample_two" type="text" placeholder="Sample 2" />
+            </span>
+            <br />H0:  
+            <input type="text" placeholder="&mu; 1" /> = 
+            <input type="text" placeholder="&mu; 2" />
+            <br />Ha:  
+            <input type="text" placeholder="&mu; 1" /> 
+            <select id="alternative-options">
+              <option value="greater"> &gt; </option>
+              <option value="lesser"> &lt; </option>
+              <option value="notequals"> &#33;&#61; </option>
+            </select>
+            <input type="text" placeholder="&mu; 2" /></form>
+            <div class="sample">
+              <h4>Sample File 1 (Google Trend CSV File)</h4>
+              <div class="drop_zone" id="drop_zone_one">Drop files here</div>
+            </div>
+            <div class="sample">
+              <h4>Sample File 2 (Google Trend CSV File)</h4>
+              <div class="drop_zone" id="drop_zone_two">Drop files here</div>
+            </div>
+            <div id="suggestion-block">
+              <p>Suggestions</p>
+            </div>
+          </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span9">
+          <div class="hero-unit">
+            <h2>2. Define Population</h2>
+              <div class="chart" >
+              <svg id="chart_one" width = "650" height = "120">
+                  <g  transform="translate(10,25)">
+                  </g>
+              </svg>
+              </div>
+              <div class="chart">
+              <svg id="chart_two" width = "650" height = "120">
+                <g  transform="translate(10,25)">
+                </g>
+              </svg>
+              </div>
+          </div>
+          <div class="hero-unit">
+            <h2>3. Select the Test Input</h2>
+                <div>
+                <form name="input-set">
+                    <select id="sample-type">
+                      <option value="Serial" selected>Serial</option>
+                      <option value="Random">Random</option>
+                      <option value="Partition">Partition</option>
+                      <option value="notequals">Cluster</option>
+                    </select>
+                    <div>
+                    <input id="ci" type="text">Confidence Interval</input>
+                    </div>
+                    <div>
+                    <input>&alpha; - Alpha (The Level of Significance)</input>
+                    </div>
+                    <div>
+                        <input id="compute" type="button" value="Compute" onClick="run_test()"></input>
+                    </div>
+                </form>
+                </div>
+          </div>
+          <div class="hero-unit">
+            <h2>4. Results</h2>
+              <div id="result-set">
+                  <p>p-value</p>
+                  <p>effective size</p>
+                  <p>Confidence Interval</p>
+              </div>
+          </div>
+        </div><!--/span-->
+      </div><!--/row-->
+</div><!--/.fluid-container-->
+  </body>
+</html>

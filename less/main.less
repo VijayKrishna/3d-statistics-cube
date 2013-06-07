@@ -91,10 +91,7 @@ svg{
     margin:@padding;
     font-size: 10px;
 }
-.chart rect {
-    stroke: white;
-    fill: steelblue;  
-}
+
 .chart rect:hover{
     opacity:0.5;
 }
@@ -111,4 +108,14 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     margin: 0;
     padding: 0;
     vertical-align: baseline;
+}
+
+.brush .extent {
+  stroke:#fff;
+  fill-opacity:.125;
+  shape-rendering:crispEdges;
+}
+
+.selected {
+  stroke-width: 10;
 }
