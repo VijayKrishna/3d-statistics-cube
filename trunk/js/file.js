@@ -125,26 +125,32 @@ function render(evt, dataSet){
     var svg = null;
     var chart_selection_end_view = null;
     var chart_selection_start_view = null;
+    var chart_barsholder = null;
     if(evt.target.output_zone.indexOf("one") !== -1){
         d3.select("#x-axis-one").call(xAxis);
         d3.select("#y-axis-one").call(yAxis);
         svg = d3.select("#chart_one");
         chart_selection_end_view = d3.select("#chart_one_selection_end");
         chart_selection_start_view = d3.select("#chart_one_selection_start");
-
+        chart_barsholder = d3.select("#chart_one_barsholder");
     } else {
         d3.select("#x-axis-two").call(xAxis);
         d3.select("#y-axis-two").call(yAxis);    
         svg = d3.select("#chart_two");
         chart_selection_end_view = d3.select("#chart_two_selection_end");
         chart_selection_start_view = d3.select("#chart_two_selection_start");
+        chart_barsholder = d3.select("#chart_two_barsholder");
     }
 
     chart_selection_start_view.text(data[0].startDate);
     chart_selection_end_view.text(data[data.length - 1].endDate);
 
-    var bars = d3.select(chart)
-        .select("g").selectAll("rect")
+    
+    if(chart_barsholder.selectAll("rect")[0].length) {
+       chart_barsholder.selectAll("rect").remove(); 
+    }
+    
+    var bars = chart_barsholder.selectAll("rect")
         .data(data);
         
     bars.enter().append("rect");
@@ -163,8 +169,9 @@ function render(evt, dataSet){
         .style("fill","steelblue")
         .style("stroke", "white")
         // removes the class "selected" from the bars if applied due to a prior data set.
-        .classed("selected", false) 
+        .classed("selected", function() {console.log("hmm..."); return false;}) 
         ;
+
     var selected_dates = new Array();
     var brush = d3.svg.brush().x(xScale)
         .on("brushstart", function() {
@@ -200,12 +207,12 @@ function render(evt, dataSet){
         });
     
     //remove any existing brushes before appending a new one.
-    var prior_brushes = d3.selectAll("svg#chart_one").selectAll(".brush");
+    var prior_brushes = svg.selectAll(".brush");
     if(prior_brushes[0].length != 0) {
         prior_brushes.remove();
     }
     
-    svg.append("g")
+    svg.insert("g", "g")
         .attr("id", "brush")
         .attr("class", "brush")
         .attr("transform", "translate(40,25)")
@@ -213,7 +220,8 @@ function render(evt, dataSet){
         .selectAll("rect")
         .attr("height", h)
         ;
-    
+
+
     // Remove the hash tag and insert the data into svg
     chart = chart.substring(1, chart.length);
     document.getElementById(chart).content = data;
