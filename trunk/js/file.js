@@ -3,6 +3,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 } else {
   alert('The File APIs are not fully supported in this browser.');
 }
+
 var numberOfBars = 40; // Rough value can be n-1 or n
 
 function handleFileSelect(evt) {
