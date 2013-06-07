@@ -154,6 +154,8 @@ function render(evt, dataSet){
         .attr("height", function(d) { return h - yScale(d.value); })
         .style("fill","steelblue")
         .style("stroke", "white")
+        // removes the class "selected" from the bars if applied due to a prior data set.
+        .classed("selected", false) 
         ;
 
     var brush = d3.svg.brush().x(xScale)
@@ -175,7 +177,10 @@ function render(evt, dataSet){
             svg.classed("selecting", !d3.event.target.empty());
         });
 
+    //remove any existing brushes before appending a new one.
+    d3.selectAll("svg#chart_one").selectAll(".brush").remove()
     svg.append("g")
+        .attr("id", "brush")
         .attr("class", "brush")
         .attr("transform", "translate(40,25)")
         .call(brush)
