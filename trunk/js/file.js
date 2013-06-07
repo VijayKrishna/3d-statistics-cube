@@ -122,18 +122,26 @@ function render(evt, dataSet){
                         .orient('left');
                         
     var chart = evt.target.chart;
-    var svg = null
+    var svg = null;
+    var chart_selection_end_view = null;
+    var chart_selection_start_view = null;
     if(evt.target.output_zone.indexOf("one") !== -1){
         d3.select("#x-axis-one").call(xAxis);
         d3.select("#y-axis-one").call(yAxis);
         svg = d3.select("#chart_one");
+        chart_selection_end_view = d3.select("#chart_one_selection_end");
+        chart_selection_start_view = d3.select("#chart_one_selection_start");
+
     } else {
         d3.select("#x-axis-two").call(xAxis);
         d3.select("#y-axis-two").call(yAxis);    
         svg = d3.select("#chart_two");
+        chart_selection_end_view = d3.select("#chart_two_selection_end");
+        chart_selection_start_view = d3.select("#chart_two_selection_start");
     }
 
-
+    chart_selection_start_view.text(data[0].startDate);
+    chart_selection_end_view.text(data[data.length - 1].endDate);
 
     var bars = d3.select(chart)
         .select("g").selectAll("rect")
@@ -157,7 +165,7 @@ function render(evt, dataSet){
         // removes the class "selected" from the bars if applied due to a prior data set.
         .classed("selected", false) 
         ;
-
+    var selected_dates = new Array();
     var brush = d3.svg.brush().x(xScale)
         .on("brushstart", function() {
             svg.classed("selecting", true);
@@ -168,17 +176,35 @@ function render(evt, dataSet){
           s[0] = xScale(s[0]);
           s[1] = xScale(s[1]);
           // console.log(s[0] + " " + s[1]);
-          bars.classed("selected", function(d,i) { 
-            var temp_x = xScale(new Date(data[i].startDate));
+          selected_dates = new Array();
+          bars.classed("selected", function(d,i) {
+            var temp_x = xScale(new Date(d.startDate));
+            if((s[0] - .5) <= temp_x && (temp_x + w) <= s[1]) {
+                selected_dates.push(d.startDate);
+                selected_dates.push(d.endDate);
+            }
             // console.log(temp_x);
             return (s[0] - .5) <= temp_x && (temp_x + w) <= s[1]; });
+          if(selected_dates.length == 0) {
+            chart_selection_start_view.text(data[0].startDate);
+            chart_selection_end_view.text(data[data.length - 1].endDate);
+          } else {
+            chart_selection_start_view.text(selected_dates[0]);
+            chart_selection_end_view.text(selected_dates[selected_dates.length - 1]);
+          }
+          
+          // console.log(selected_dates);
         })
         .on("brushend", function() {
             svg.classed("selecting", !d3.event.target.empty());
         });
-
+    
     //remove any existing brushes before appending a new one.
-    d3.selectAll("svg#chart_one").selectAll(".brush").remove()
+    var prior_brushes = d3.selectAll("svg#chart_one").selectAll(".brush");
+    if(prior_brushes[0].length != 0) {
+        prior_brushes.remove();
+    }
+    
     svg.append("g")
         .attr("id", "brush")
         .attr("class", "brush")

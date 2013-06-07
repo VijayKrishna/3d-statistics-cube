@@ -14,7 +14,7 @@
         <ul>
           <li>
             <div class="block" id="block-one">
-              <h2>2. Define Population</h2>
+              <h2>step 2. Define Population</h2>
               <div class="chart" >
               <svg id="chart_one" width = "700" height = "150">
                 <g  transform="translate(40,25)">
@@ -24,7 +24,13 @@
                 <g class = "axis" id=y-axis-one transform="translate(40, 25)">
                 </g>
               </svg>
+              <span>Current Selection:</span>
+              <span id="chart_one_selection_start">waiting for you</span>
+              <span>to</span>
+              <span id="chart_one_selection_end">drop some CSV files.</span>
+              <span>(we assume that selecting nothing is selecting everything)</span>
               </div>
+              <br/>
               <div class="chart">
               <svg id="chart_two" width = "700" height = "120">
                 <g  transform="translate(40,25)">
@@ -34,12 +40,17 @@
                 <g class = "axis" id=y-axis-two transform="translate(40, 25)">
                 </g>
               </svg>
+              <span>Current Selection:</span>
+              <span id="chart_two_selection_start">waiting for you</span>
+              <span>to</span>
+              <span id="chart_two_selection_end">drop some CSV files.</span>
+              <span>(we assume that selecting nothing is selecting everything)</span>
               </div>
             </div>
           </li>
           <li>
             <div class="block" id="block-two">
-              <h2>3. Select the Test Input</h2>
+              <h2>step 3. Select the Test Input</h2>
                 <div>
                 <form name="input-set">
                     <span>Select Sampling Method</span>
@@ -64,7 +75,7 @@
           </li>
           <li>
             <div class="block" id="block-one">
-              <h2>4. Results</h2>
+              <h2>step 4. Reap the Results</h2>
               <div id="result-set">
                   <p>p-value</p>
                   <p>effective size</p>
@@ -76,7 +87,7 @@
       </div>
       <div id="left-content">
         <h1>Statistics t-test</h1>
-        <h2>1. Research Question and Null-Hypothesis</h2>
+        <h2>step 1. Research Question and Null-Hypothesis</h2>
         <form>RQ: 
         <input id="sample_one" type="text" placeholder="Sample 1" /> v.s. 
         <span>
