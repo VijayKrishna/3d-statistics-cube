@@ -177,5 +177,5 @@ td {
   shape-rendering: crispEdges;
 }
 .selected {
-  stroke-width: 10;
+  fill-opacity: .5;
 }

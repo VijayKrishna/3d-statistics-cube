@@ -105,7 +105,7 @@ svg.append("g")
 .attr("class", "brush")
 .call(brush)
 .selectAll("rect")
-.attr("height", h);
+.attr("height", h + 10);
 
 
 bars.on("click", clickEvent)
