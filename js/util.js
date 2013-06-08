@@ -40,7 +40,7 @@ function run_test() {
     d=Math.round(d*10000000)/10000000; 
     
     var df = 1;
-    if(!document.getElementById("df"))  {
+    if(document.getElementById("df"))  {
         df=parseFloat(document.getElementById("df").value);
         r = Math.sqrt((t_score*t_score)/((t_score*t_score)+(df*1)));
         d = (t_score*2)/(Math.sqrt(df));
