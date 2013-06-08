@@ -259,3 +259,47 @@ for(var i = 0; i < selectOptions.length;i++){
     }
 }
 
+var current_step = 0;
+var previous_step = 0;
+var progress_state = "start";
+
+$("li").on('activate', function() {
+    current_step = this.childNodes[0].href.split("step")[this.childNodes[0].href.split("step").length - 1];
+    if(previous_step < current_step) {
+        if(current_step != 1) {
+            insert_alert_boxes("alert-success", "Progress.", "Looks like you are now in <strong>step " 
+            + current_step + "</strong>"
+            + " and making good progress. Keep it up!");        
+        }
+        progress_state = "progress";
+    } else if(previous_step >= current_step && progress_state != "stepback") {
+        progress_state = "stepback";
+        insert_alert_boxes("alert-warning", "Hmm.", "Looks like you are steping back." 
+            + " Take your time and understand the concept well.");    
+    }
+    previous_step = current_step;
+
+    
+});
+
+var insert_alert_boxes = function(alert_type, heading, message) {
+    var close_button_html = "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>";
+    var box_message_html = "<strong>" + heading + "</strong> " + message;
+    var alert_types = ["alert-error", "alert-success", "alert-info", ""];
+    if((alert_types.indexOf(alert_type) == 0) 
+        || alert_types.indexOf(alert_type)) {
+        d3.select("#suggestion-block").select("div").insert("div", "div")
+                                    .attr("class", "alert " + alert_type)
+                                    .html(close_button_html + box_message_html)
+                                    ;
+    } else {
+        var box_message_html = "<strong>" 
+        + "Well, this is embarassing!" 
+        + "</strong> " 
+        + "Something seems to have gone terribly wrong. Report this issue to xyz @ i . com";
+        d3.select("#suggestion-block").select("div").insert("div", "div")
+                                    .attr("class", "alert alert-error")
+                                    .html(close_button_html + box_message_html)
+                                    ;
+    }
+}
