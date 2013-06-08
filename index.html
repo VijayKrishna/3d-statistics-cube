@@ -9,9 +9,14 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
-    <script src="js/d3.v3.js" charset="utf-8" type="text/javascript"></script>
-    <script src="js/crossfilter.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/crossfilter.js" type="text/javascript"></script>
+    <script src="js/d3.v3.js" charset="utf-8" type="text/javascript"></script>
+    <script src="js/jstat/core.js" type="text/javascript"></script>
+    <script src="js/jstat/distribution.js" type="text/javascript"></script>
+    <script src="js/jstat/special.js" type="text/javascript"></script>
+    <script src="js/jstat/vector.js" type="text/javascript"></script>
+    <script src="js/jstat/test.js" type="text/javascript"></script>
   </head>
   <body data-spy="scroll" data-target="#side-nav">
 
@@ -125,18 +130,9 @@
               <h2>step 3. Select the Test Input</h2>
                 <div>
                 <form name="input-set">
-                    <span>Select Sampling Method</span>
-                    <select id="sample-type">
-                      <option value="Serial" selected>Serial</option>
-                      <option value="Random">Random</option>
-                      <option value="Partition">Partition</option>
-                      <option value="notequals">Cluster</option>
-                    </select>
+                    <span>Sampling Method: Serial</span>
                     <div>
-                    <input id="ci" type="text">Confidence Interval</input>
-                    </div>
-                    <div>
-                    <input type="text">&alpha; - Alpha (The Level of Significance)</input>
+                    <input id="df" type="text">Degree of Freedom</input>
                     </div>
                     <div>
                         <input class="btn btn-primary" id="compute" type="button" value="Compute" onClick="run_test()"></input>
@@ -149,9 +145,12 @@
             <div class="hero-unit" id="step4">
               <h2>step 4. Reap the Results</h2>
               <div id="result-set">
-                  <p>p-value</p>
-                  <p>effective size</p>
-                  <p>Confidence Interval</p>
+                  <p id="t-value">t-value</p>
+                  <p id="mean">Mean</p>
+                  <p id="standard_deviation">Standard Deviation</p>
+                  <p id="effective_size">Effective size</p>
+                  <p id="num_of_obs">Number of Observations</p>
+                  <p id="significance_level">Significance Level (p-value)</p>
               </div>
             </div>
           </li>
@@ -159,6 +158,7 @@
       </div>
       
       <script src="js/file.js" type="text/javascript"></script>
+      <script src="js/util.js" type="text/javascript"></script>
     </div>
   </body>
 </html>
