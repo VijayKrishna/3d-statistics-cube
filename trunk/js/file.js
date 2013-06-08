@@ -54,6 +54,11 @@ function handleCSV(evt, f) {
                     }
                }
         }
+        if(evt.target.output_zone.indexOf("one") !== -1){
+            document.getElementById("sample_one").content = dataSet;
+        } else {
+            document.getElementById("sample_two").content = dataSet;
+        }
         dataSet = refineData(dataSet);
         render(evt, dataSet);
     }
@@ -94,16 +99,11 @@ var width = 640;
 var height = 120;
 
 function render(evt, dataSet){
-
-
-
     var data = dataSet;  
-    var timeFormat = d3.time.format("%Y-%d-%d").parse;
-
     var w = Math.ceil(width/data.length);
     var h = 80;
     var xScale = d3.time.scale()
-        .domain([new Date(data[0].startDate), d3.time.day.offset(new Date(data[data.length - 1].startDate), 1)])
+        .domain([new Date(data[0].startDate), d3.time.day.offset(new Date(data[data.length - 1].endDate), 1)])
         .range([0, width]);
 
     var yScale = d3.scale.linear()
@@ -114,7 +114,7 @@ function render(evt, dataSet){
     var xAxis = d3.svg.axis()
                         .scale(xScale)
                         .ticks(6)
-                        .tickPadding(6)
+                        .tickPadding(3)
                         .tickSize(0)
                         .orient('bottom');  
     var yAxis = d3.svg.axis()
@@ -146,7 +146,6 @@ function render(evt, dataSet){
     chart_selection_start_view.text(data[0].startDate);
     chart_selection_end_view.text(data[data.length - 1].endDate);
 
-    
     if(chart_barsholder.selectAll("rect")[0].length) {
        chart_barsholder.selectAll("rect").remove(); 
     }
@@ -170,7 +169,7 @@ function render(evt, dataSet){
         .style("fill","steelblue")
         .style("stroke", "white")
         // removes the class "selected" from the bars if applied due to a prior data set.
-        .classed("selected", function() {console.log("hmm..."); return false;}) 
+        .classed("selected", function() {return false;}) 
         ;
 
     var selected_dates = new Array();
@@ -222,13 +221,9 @@ function render(evt, dataSet){
         .attr("height", h)
         ;
 
-
     // Remove the hash tag and insert the data into svg
     chart = chart.substring(1, chart.length);
     document.getElementById(chart).content = data;
-    
-
-    
 }
 // Setup the dnd listeners.
 var dropZone1 = document.getElementById('drop_zone_one');
@@ -243,22 +238,7 @@ dropZone2.addEventListener('drop', handleFileSelect, false);
 dropZone2.output_zone = 'list_two'; // Sample Input Two
 dropZone2.chart = '#chart_two'; // svg tag chart two
 
-function run_test(){
-    var sampleType = getSelected(document.getElementById('sample-type'));
-    var alternativeOption = getSelected(document.getElementById('alternative-options'));
-    
-    console.log(document.getElementById('chart_one').content);
-    console.log(document.getElementById('chart_two').content);
-}
-
-function getSelected(selectOptions){
-for(var i = 0; i < selectOptions.length;i++){
-        if(selectOptions.options[i].selected){
-            return selectOptions.options[i].value;
-        }
-    }
-}
-
+//------- Suggestion Box
 var current_step = 0;
 var previous_step = 0;
 var progress_state = "start";
