@@ -3,11 +3,12 @@ function run_test() {
     var alternativeOption = getSelected(document.getElementById('alternative-options'));
     var dataSetOne = document.getElementById('sample_one').content;
     var dataSetTwo = document.getElementById('sample_two').content;
-    
+    console.log(dataSetTwo);
     if(alternativeOption !== 'notequals') {
         sides = 2;
     }
     if((! dataSetOne) || (! dataSetTwo)) {
+        insert_alert_boxes("alert-error", "Drop both the Google Trend CSV Files.", "We also provide you with <a href=\"report.csv\">examples</a>.");
         alert("Missing Data Set");
         return;
     }
@@ -16,6 +17,10 @@ function run_test() {
     var endDateOne = document.getElementById('chart_one_selection_end').firstChild.data;
     var endDateTwo = document.getElementById('chart_two_selection_end').firstChild.data;
     
+    if((startDateOne != startDateTwo) || (endDateOne != endDateTwo)) {
+        insert_alert_boxes("alert-warning", "Different Time Frames.", "Interesting! You choose data from different times for the two data-sets. Make sure that is exactly what your experiment is concerned with.");
+    }
+
     var setOne = getRawDataSet(dataSetOne, startDateOne, endDateOne);
     var setTwo = getRawDataSet(dataSetTwo, startDateTwo, endDateTwo);
     meanOne = mean(setOne);
@@ -57,13 +62,21 @@ function run_test() {
             ="Effective Size<div>"+r.toFixed(2)+"</div>";
     document.getElementById('num_of_obs').innerHTML 
             ="Number of Observations<div>One: "+setOne.length+ " Two: "+setTwo.length+"</div>";
-    
+    var pval = null;
     if(sides === 1){
+        pval = TtoP(t_score,df).toFixed(4);
         document.getElementById('significance_level').innerHTML 
-                ="Significance Level (p-value)<div>"+TtoP(t_score,df).toFixed(4)+"</div>";
+                ="Significance Level (p-value)<div>"+pval+"</div>";
     } else {
+        pval = (TtoP(t_score,df)/2).toFixed(4);
         document.getElementById('significance_level').innerHTML 
-                ="Significance Level (p-value)<div>"+(TtoP(t_score,df)/2).toFixed(4)+"</div>";
+                ="Significance Level (p-value)<div>"+pval+"</div>";
+    }
+    insert_alert_boxes("alert-info", "Alpha.", "Before you run any statistical test, you must first determine your alpha level, which is also called the “significance level.” By definition, the alpha level is the probability of rejecting the null hypothesis when the null hypothesis is true. In other words, its the probability of making a wrong decision. Most folks typically use an alpha level of 0.05. However, if youre analyzing airplane engine failures, you may want to lower the probability of making a wrong decision and use a smaller alpha. On the other hand, if you’re making paper airplanes, you might be willing to increase alpha and accept the higher risk of making the wrong decision. Like all probabilities, alpha ranges from 0 to 1.");
+    if(pval <= 0.05) {
+        insert_alert_boxes("alert-success", "Statistical Significance!", "Interesting! It seems that the difference in the means of the two data-sets is due to more than just a coincidence or measuring errors. We are assuming a value of alpha to be 0.005 (scroll down to learn more about Alpha). Oh, and you can reject the Null Hypthesis!");
+    } else {
+        insert_alert_boxes("alert-error", "Fail to Reject", "Looks like you are unable to reject the null hypothesis given the data you are working with. Are you asking the right research question? Are you using the correct data? We are assuming a value of alpha to be 0.005 (scroll down to learn more about Alpha).");
     }
 }
 
