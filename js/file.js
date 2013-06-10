@@ -7,6 +7,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 var numberOfBars = 40; // Rough value can be n-1 or n
 
 function handleFileSelect(evt) {
+    insert_alert_boxes("alert-info", "Manipulate Data.", "You can manipulate the values of inidividual bars in the graph clicking each bar.");
     evt.stopPropagation();
     evt.preventDefault();
 
@@ -245,12 +246,29 @@ var progress_state = "start";
 
 $("li").on('activate', function() {
     current_step = this.childNodes[0].href.split("step")[this.childNodes[0].href.split("step").length - 1];
-    if(previous_step < current_step) {
-        if(current_step != 1) {
-            insert_alert_boxes("alert-success", "Progress.", "Looks like you are now in <strong>step " 
+
+    if(current_step === "1") {
+        insert_alert_boxes("alert-info", "Null/Alternate Hypothesis.", "Many articles mention what a researcher is testing to be the cause of a particular phenomenon (a researcher is testing what is known as the alternate hypothesis (H1). They fail to mention the null hypothesis (H0). It is a standard fixture in statistical literature. The null hypothesis is what a researcher tries to reject or fails-to-reject.");
+        insert_alert_boxes("alert-warning", "Reject vs Disprove.", "To Reject does not mean to Disprove. Remember hypothesis testing is tied to the data being used for the test.");
+    }
+    if(current_step === "2") {
+        insert_alert_boxes("alert-warning", "Correct Data Input.", "Make sure that you feed in both data-sets");
+    }
+    if(current_step === "3") {
+        insert_alert_boxes("alert-info", "Serial Sampling.", "Serial sampling is when you select every 3rd or 10th item. It is a close substitue for random sampling.");
+    }
+
+    if(previous_step < current_step && current_step != "1" && progress_state != "progress") {
+        insert_alert_boxes("alert-success", "Progress.", "Looks like you are now in <strong>step " 
             + current_step + "</strong>"
-            + " and making good progress. Keep it up!");        
-        }
+            + " and making good progress. Keep it up!");
+
+        // if(current_step != 1) {
+                    
+        // }
+
+        
+
         progress_state = "progress";
     } else if(previous_step >= current_step && progress_state != "stepback") {
         progress_state = "stepback";
